@@ -1,6 +1,6 @@
-# Taskagotchi – A To-Do List with a Coffee Buddy (Console)
+# Taskagotchi – A To-Do List with a Coffee Buddy
 
-Taskagotchi is a console to-do application written in Python. Every finished task feeds a small coffee cup buddy ("coffee buddy") that lives in the terminal. If the user gets things done, the buddy is happy and full of caffeine. If the to-do list is ignored, the buddy gets sleepy.
+Taskagotchi is a console to-do application written in Python. Every finished task feeds a small coffee cup buddy that lives in the terminal. If the user gets things done, the buddy is happy and full of caffeine. If the to-do list is ignored, the buddy gets sleepy.
 
 This project was created for the module *Programming Foundations* (FHNW, BSc BIT).
 
@@ -8,7 +8,7 @@ This project was created for the module *Programming Foundations* (FHNW, BSc BIT
 
 ### Problem
 
-Students and professionals have many small and large tasks (assignments, readings, work projects, meetings, chores). Most to-do apps work, but they are boring, so people stop using them after a few days. Tasks are forgotten and there is no motivation to keep the list up to date.
+Students and professionals have many small and large tasks (assignments, readings, work projects, meetings, chores). Standart to-do lists are functional but lack engagement, so people stop using them after a few days. Tasks are forgotten and there is no motivation to keep the list up to date.
 
 ### Scenario
 
