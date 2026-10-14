@@ -193,47 +193,44 @@ The task sizes used in the examples below are:
 
 ---
 
-#### US-10: Navigate a main menu
+#### US-10: Edit an existing Task
 
-**As a** student, **I want** a clear main menu, **so that** I always know what I can do next.
+**As a** student, **I want** to edit the title or size of an open task, **so that** I can fix typos or adjust the effort without deleting or recreating the task.
 
 ##### US-10 acceptance criteria
 
-- At startup the heading `===== TASKAGOTCHI =====`, the buddy and the main menu are shown.
-- The main menu offers the options `1` Show tasks, `2` Add task, `3` Finish task, `4` Delete task, `5` Check on buddy, `6` Pet buddy, `0` Save & quit.
-- The menu runs in a `while` loop and each option calls its own function.
-- *Given* the main menu is displayed, *when* the student enters anything other than `0` – `6` (e.g., `7`, `abc` or an empty input), *then* the message `Unknown option, try again.` is displayed and the menu is shown again.
-- *Given* no save file exists, *when* the app starts, *then* the student is asked `Name your coffee buddy:`. If the input is empty, the buddy is named `Bean`.
-- *Given* the main menu is displayed, *when* the student enters `0`, *then* the data is saved, the message `Saved! Bean will keep your coffee warm. Bye!` is displayed and the program ends.
+- The student can start editing by selecting option `7` ("Edit task") in the main menu and choosing the number of an open task.
+- Entering `0` cancels the action and returns to the main menu without changes.
+- The student is asked for a new title. Pressing Enter without typing keeps the current title.
+- The student is asked for a new size (`S`, `M`, `L`). Pressing Enter without typing keeps the current size.
+- *Given* task `1` is `Write REDME (S)`, *when* the student changes the title to `Write README` and the size to `M`, *then* the confirmation message `Updated 'Write README' (Latte)!` is displayed and the task list shows the updated values.
 
 ---
 
-#### US-11: Keep my progress (save and load)
+#### US-11: Filter open tasks by size
 
-**As a** professional, **I want** my tasks and buddy to be saved, **so that** I don't lose progress when I close the app.
+**As a** professional, **I want** to filter my open tasks by size, ('S', 'M', 'L'), **so that**  I i can quickly find a task that fits my available time and energy.
 
 ##### US-11 acceptance criteria
 
-- Tasks, buddy stats (name, caffeine, XP, level) and the last-visit time are saved to the JSON file `data/save.json`.
-- The data is saved after every menu action and when the student quits with `0`.
-- *Given* the student has 2 open tasks and a level 2 buddy with 30 XP, *when* the app is closed and started again, *then* the same 2 tasks and a level 2 buddy with 30 XP are loaded.
-- *Given* `data/save.json` does not exist, *when* the app starts, *then* a new game is started with a buddy at 50 % caffeine, 0 XP and level 1.
-- *Given* `data/save.json` contains invalid JSON, *when* the app starts, *then* the message `Save file is broken, starting a new game.` is displayed and a new game is started (no crash).
+- The student can filter tasks by selecting option `8` ("Filter tasks by size") in the main menu and entering `S`, `M` or `L` (case-insensitive).
+- Only open tasks matching the chosen size are displayed, using the standard task format.
+- *Given* there are two open `S` tasks and one open `L` task, *when* the student filters by `S`, *then* only the two `S` tasks are displayed.
+- *Given* there are no open tasks of size `L`, *when* the student filters by `L`, *then* the message `No open Frappe (L) tasks found.` is displayed.
+- *Given* the student enters an invalid size, *when* confirmed, *then* the app asks again until `S`, `M` or `L` is entered.
 
 ---
 
-#### US-12: The app never crashes on bad input
+#### US-12: View completed tasks and statistics
 
-**As a** student, **I want** the app to handle wrong input gracefully, **so that** I can't break it by accident.
+**As a** professional, **I want** to see a list of my completed tasks and total statistics, **so that** I can review what I have already achieved.
 
 ##### US-12 acceptance criteria
 
-- A reusable helper function `ask_number()` keeps asking until a valid number is entered.
-- *Given* the student is asked for a task number, *when* `abc`, `1.5` or an empty input is entered, *then* the message `Please type a number.` is displayed and the number is asked again.
-- *Given* there are 3 open tasks, *when* `-1` or `4` is entered, *then* the message `Please choose between 1 and 3 (0 to cancel).` is displayed and the number is asked again.
-- `0` always means "cancel" in the sub-menus (finish task, delete task).
-- Input is accepted regardless of surrounding spaces, e.g., ` 1 ` in the main menu works like `1`.
-- In none of the cases above does the program terminate with an error (no Python traceback is shown).
+The history is shown when the user selects option `9` ("Completed tasks") in the main menu.
+- All completed tasks are listed with their title and size name, e.g., `[x] Write README (Latte)`.
+- Below the list, a summary line displays the total number of completed tasks and total XP earned from them, e.g., `Total completed: 5 tasks (110 XP earned)`.
+- *Given* no tasks have been completed yet, *when* the option is selected, *then* the message `No completed tasks yet. Time to get some coffee!` is displayed.
 
 ---
 
@@ -352,7 +349,8 @@ These libraries are part of the Python standard library, so no external installa
 | Martina Juric | Task management: add, show and delete tasks (`tasks.py`, US-01 – US-03) |
 | Philipp Zoller | Coffee buddy: feeding, moods, ASCII art and reactions (`buddy.py`, US-04 – US-06) |
 | Federico Janzich | Progression: XP, levels, evolution and caffeine decay (`progress.py`, US-07 – US-09) |
-| Fatos Sallauka | App shell: main menu, saving/loading and input validation (`main.py`, `storage.py`, US-10 – US-12) |
+| Fatos Sallauka | Extended task features: edit tasks, filter by size and completed tasks history (`tasks.py`, US-10 – US-12) |
+| Whole team | App shell: main menu, saving/loading and input validation (`main.py`, `storage.py`, US-10 – US-12) |
 
 ## License
 
