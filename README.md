@@ -36,9 +36,9 @@ Each team member owns three user stories.
 | US-07 | Federico Janzich | Earn XP and level up |
 | US-08 | Federico Janzich | Watch my buddy evolve |
 | US-09 | Federico Janzich | Caffeine decays over time |
-| US-10 | Fatos Sallauka | Navigate a main menu |
-| US-11 | Fatos Sallauka | Keep my progress (save and load) |
-| US-12 | Fatos Sallauka | The app never crashes on bad input |
+| US-10 | Fatos Sallauka | Edit an existing Task |
+| US-11 | Fatos Sallauka | Filter open tasks by size |
+| US-12 | Fatos Sallauka | View completed tasks and statistics |
 
 The task sizes used in the examples below are:
 
@@ -350,7 +350,7 @@ These libraries are part of the Python standard library, so no external installa
 | Philipp Zoller | Coffee buddy: feeding, moods, ASCII art and reactions (`buddy.py`, US-04 – US-06) |
 | Federico Janzich | Progression: XP, levels, evolution and caffeine decay (`progress.py`, US-07 – US-09) |
 | Fatos Sallauka | Extended task features: edit tasks, filter by size and completed tasks history (`tasks.py`, US-10 – US-12) |
-| Whole team | App shell: main menu, saving/loading and input validation (`main.py`, `storage.py`, US-10 – US-12) |
+| Whole team | App shell: main menu, saving/loading and input validation (`main.py`, `storage.py`)|
 
 ## License
 
