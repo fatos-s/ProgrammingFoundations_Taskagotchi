@@ -1,6 +1,6 @@
 # Taskagotchi – A To-Do List with a Coffee Buddy
 
-Taskagotchi is a console to-do application written in Python. Every finished task feeds a small coffee cup buddy that lives in the terminal. If the user gets things done, the buddy is happy and full of caffeine. If the to-do list is ignored, the buddy gets sleepy.
+Taskagotchi is a console to-do application written in Python. Every finished task feeds a small coffee cup buddy that lives in the terminal. If the User gets things done, the buddy is happy and full of caffeine. If the to-do list is ignored, the buddy gets sleepy.
 
 This project was created for the module *Programming Foundations* (FHNW, BSc BIT).
 
@@ -8,18 +8,17 @@ This project was created for the module *Programming Foundations* (FHNW, BSc BIT
 
 ### Problem
 
-Students and professionals have many small and large tasks (assignments, readings, work projects, meetings, chores). Standart to-do lists are functional but lack engagement, so people stop using them after a few days. Tasks are forgotten and there is no motivation to keep the list up to date.
+Everyday life is full of small and large tasks (assignments, readings, work projects, meetings, chores). Standard to-do lists are functional but lack engagement, so people stop using them after a few days. Tasks are forgotten and there is no motivation to keep the list up to date.
 
 ### Scenario
 
-Taskagotchi solves the part of the problem where a student loses motivation to manage their tasks. The student adds tasks in the console, marks them as finished when they are done, and is rewarded by a virtual coffee buddy that gains caffeine, XP and levels. When the student stays away for a long time, the buddy loses caffeine, which gives a reason to come back regularly. All data is saved to a file so that progress is kept between sessions.
+Taskagotchi solves the part of the problem where a User loses motivation to manage their tasks. The User adds tasks in the console, marks them as finished when they are done, and is rewarded by a virtual coffee buddy that gains caffeine, XP and levels. When the User stays away for a long time, the buddy loses caffeine, which gives a reason to come back regularly. All data is saved to a file so that progress is kept between sessions.
 
 ### User Roles
 
 | Role | Description |
 | --- | --- |
-| **Student** | Uses the app daily to add, view, finish and delete tasks and to check on the buddy. |
-| **Professional** | Uses the app at work to keep track of work tasks and expects tasks and buddy progress to still be there the next working day. |
+| **User** | Uses the app daily to add, view, edit, finish and delete tasks and to check on the buddy. |
 
 ### User Stories
 
@@ -36,7 +35,7 @@ Each team member owns three user stories.
 | US-07 | Federico Janzich | Earn XP and level up |
 | US-08 | Federico Janzich | Watch my buddy evolve |
 | US-09 | Federico Janzich | Caffeine decays over time |
-| US-10 | Fatos Sallauka | Edit an existing Task |
+| US-10 | Fatos Sallauka | Edit an existing task |
 | US-11 | Fatos Sallauka | Filter open tasks by size |
 | US-12 | Fatos Sallauka | View completed tasks and statistics |
 
@@ -52,27 +51,27 @@ The task sizes used in the examples below are:
 
 #### US-01: Add a task
 
-**As a** student, **I want** to add a task with a title and a size, **so that** I can keep track of what I need to do.
+**As a** User, **I want** to add a task with a title and a size, **so that** I can keep track of what I need to do.
 
 ##### US-01 acceptance criteria
 
-- The task is added when the student selects option `2` ("Add task") in the main menu.
-- The student is first asked for a title, then for a size `S`, `M` or `L`.
+- The task is added when the User selects option `2` ("Add task") in the main menu.
+- The User is first asked for a title, then for a size `S`, `M` or `L`.
 - The task is stored as a dictionary with the keys `title`, `size` and `done` (`done` is `False`).
-- *Given* the student enters the title `Write README` and the size `M`, *when* the task is created, *then* the message `Added 'Write README'!` is displayed.
-- *Given* the student enters an empty title (or only spaces), *when* the input is confirmed, *then* the message `A task with no name? Mysterious. Not allowed.` is displayed and no task is created.
-- *Given* the student enters an invalid size (e.g., `X` or `big`), *when* the input is confirmed, *then* the size is asked again until `S`, `M` or `L` is entered.
+- *Given* the User enters the title `Write README` and the size `M`, *when* the task is created, *then* the message `Added 'Write README'!` is displayed.
+- *Given* the User enters an empty title (or only spaces), *when* the input is confirmed, *then* the message `A task with no name? Mysterious. Not allowed.` is displayed and no task is created.
+- *Given* the User enters an invalid size (e.g., `X` or `big`), *when* the input is confirmed, *then* the size is asked again until `S`, `M` or `L` is entered.
 - The size is accepted regardless of surrounding spaces and upper/lower case, e.g., ` m ` is accepted as `M`.
 
 ---
 
 #### US-02: View my tasks
 
-**As a** student, **I want** to see a numbered list of my open tasks, **so that** I know what is left to do.
+**As a** User, **I want** to see a numbered list of my open tasks, **so that** I know what is left to do.
 
 ##### US-02 acceptance criteria
 
-- The list is shown when the student selects option `1` ("Show tasks") in the main menu.
+- The list is shown when the User selects option `1` ("Show tasks") in the main menu.
 - Each open task is shown on its own line in the format `<No>. <Title>  (<Size name>, +<XP> XP)`, e.g., `1. Write README  (Latte, +25 XP)`.
 - Numbering starts at `1` and has no gaps.
 - Finished tasks (`done` is `True`) are not shown in the list.
@@ -82,25 +81,25 @@ The task sizes used in the examples below are:
 
 #### US-03: Delete a task
 
-**As a** student, **I want** to delete a task, **so that** my list stays correct and up to date.
+**As a** User, **I want** to delete a task, **so that** my list stays correct and up to date.
 
 ##### US-03 acceptance criteria
 
-- The task is deleted when the student selects option `4` ("Delete task") and enters the number of an open task.
-- *Given* the open tasks `1. Write README` and `2. Read chapter 3`, *when* the student enters `1`, *then* `Write README` is removed, the message `Poof! Gone.` is displayed and `Read chapter 3` becomes task number `1`.
+- The task is deleted when the User selects option `4` ("Delete task") and enters the number of an open task.
+- *Given* the open tasks `1. Write README` and `2. Read chapter 3`, *when* the User enters `1`, *then* `Write README` is removed, the message `Poof! Gone.` is displayed and `Read chapter 3` becomes task number `1`.
 - Entering `0` cancels the action and no task is removed.
-- *Given* there are two open tasks, *when* the student enters `3`, *then* the message `Please choose between 1 and 2 (0 to cancel).` is displayed and the number is asked again.
+- *Given* there are two open tasks, *when* the User enters `3`, *then* the message `Please choose between 1 and 2 (0 to cancel).` is displayed and the number is asked again.
 - Deleting a task gives no XP and no caffeine.
 
 ---
 
 #### US-04: Feed my buddy by completing a task
 
-**As a** student, **I want** completing a task to feed my coffee buddy, **so that** I feel rewarded for getting things done.
+**As a** User, **I want** completing a task to feed my coffee buddy, **so that** I feel rewarded for getting things done.
 
 ##### US-04 acceptance criteria
 
-- A task is completed when the student selects option `3` ("Finish task") and enters the number of an open task.
+- A task is completed when the User selects option `3` ("Finish task") and enters the number of an open task.
 - The task is marked as `done = True` and no longer appears in the open task list.
 - The buddy's caffeine increases by the value of the task size (see table above).
 - A message shows what was gained, e.g., `You fed Bean a Latte! +25 XP, +20% caffeine`.
@@ -112,11 +111,11 @@ The task sizes used in the examples below are:
 
 #### US-05: See my buddy's mood
 
-**As a** student, **I want** to see my buddy as ASCII art with a face that matches its mood, **so that** I can tell at a glance how I am doing.
+**As a** User, **I want** to see my buddy as ASCII art with a face that matches its mood, **so that** I can tell at a glance how I am doing.
 
 ##### US-05 acceptance criteria
 
-- The buddy is shown when the student selects option `5` ("Check on buddy") and automatically at startup.
+- The buddy is shown when the User selects option `5` ("Check on buddy") and automatically at startup.
 - An ASCII coffee cup is printed together with the buddy's name, level, stage and mood.
 - The mood is calculated from the caffeine with `if / elif / else` and each mood has its own face (see table below).
 - Caffeine and XP are shown as a number and as a text bar with 20 characters, e.g., `Caffeine [##########----------] 50%`.
@@ -132,7 +131,7 @@ The task sizes used in the examples below are:
 
 #### US-06: Get a funny reaction
 
-**As a** student, **I want** my buddy to say something funny when I feed or pet it, **so that** using the app is fun.
+**As a** User, **I want** my buddy to say something funny when I feed or pet it, **so that** using the app is fun.
 
 ##### US-06 acceptance criteria
 
@@ -140,13 +139,13 @@ The task sizes used in the examples below are:
 - The lines are stored in a dictionary with at least 3 lines per task size (`S`, `M`, `L`).
 - Bigger tasks get more excited lines, e.g., `S` → `Thanks a latte!`, `L` → `WHOA. Frappe-sized win!`.
 - At startup the buddy says a line that matches its current mood (e.g., a `sleepy` buddy says `zzz... feed me tasks...` or `Running on decaf vibes here...`).
-- When the student selects option `6` ("Pet buddy"), the buddy is shown with a happy face and says one of the `pet` lines.
+- When the User selects option `6` ("Pet buddy"), the buddy is shown with a happy face and says one of the `pet` lines.
 
 ---
 
 #### US-07: Earn XP and level up
 
-**As a** student, **I want** to earn XP for finished tasks and level up my buddy, **so that** I see long-term progress.
+**As a** User, **I want** to earn XP for finished tasks and level up my buddy, **so that** I see long-term progress.
 
 ##### US-07 acceptance criteria
 
@@ -160,7 +159,7 @@ The task sizes used in the examples below are:
 
 #### US-08: Watch my buddy evolve
 
-**As a** student, **I want** my buddy to evolve into new stages at certain levels, **so that** I have goals to work towards.
+**As a** User, **I want** my buddy to evolve into new stages at certain levels, **so that** I have goals to work towards.
 
 ##### US-08 acceptance criteria
 
@@ -180,7 +179,7 @@ The task sizes used in the examples below are:
 
 #### US-09: Caffeine decays over time
 
-**As a** professional, **I want** my buddy to get sleepy when I don't use the app, **so that** I am motivated to come back regularly.
+**As a** User, **I want** my buddy to get sleepy when I don't use the app, **so that** I am motivated to come back regularly.
 
 ##### US-09 acceptance criteria
 
@@ -193,41 +192,41 @@ The task sizes used in the examples below are:
 
 ---
 
-#### US-10: Edit an existing Task
+#### US-10: Edit an existing task
 
-**As a** student, **I want** to edit the title or size of an open task, **so that** I can fix typos or adjust the effort without deleting or recreating the task.
+**As a** User, **I want** to edit the title or size of an open task, **so that** I can fix typos or adjust the effort without deleting or recreating the task.
 
 ##### US-10 acceptance criteria
 
-- The student can start editing by selecting option `7` ("Edit task") in the main menu and choosing the number of an open task.
+- The User can start editing by selecting option `7` ("Edit task") in the main menu and choosing the number of an open task.
 - Entering `0` cancels the action and returns to the main menu without changes.
-- The student is asked for a new title. Pressing Enter without typing keeps the current title.
-- The student is asked for a new size (`S`, `M`, `L`). Pressing Enter without typing keeps the current size.
-- *Given* task `1` is `Write REDME (S)`, *when* the student changes the title to `Write README` and the size to `M`, *then* the confirmation message `Updated 'Write README' (Latte)!` is displayed and the task list shows the updated values.
+- The User is asked for a new title. Pressing Enter without typing keeps the current title.
+- The User is asked for a new size (`S`, `M`, `L`). Pressing Enter without typing keeps the current size.
+- *Given* task `1` is `Write REDME (S)`, *when* the User changes the title to `Write README` and the size to `M`, *then* the confirmation message `Updated 'Write README' (Latte)!` is displayed and the task list shows the updated values.
 
 ---
 
 #### US-11: Filter open tasks by size
 
-**As a** professional, **I want** to filter my open tasks by size, ('S', 'M', 'L'), **so that**  I i can quickly find a task that fits my available time and energy.
+**As a** User, **I want** to filter my open tasks by size ('S', 'M', 'L'), **so that** I can quickly find a task that fits my available time and energy.
 
 ##### US-11 acceptance criteria
 
-- The student can filter tasks by selecting option `8` ("Filter tasks by size") in the main menu and entering `S`, `M` or `L` (case-insensitive).
+- The User can filter tasks by selecting option `8` ("Filter tasks by size") in the main menu and entering `S`, `M` or `L` (case-insensitive).
 - Only open tasks matching the chosen size are displayed, using the standard task format.
-- *Given* there are two open `S` tasks and one open `L` task, *when* the student filters by `S`, *then* only the two `S` tasks are displayed.
-- *Given* there are no open tasks of size `L`, *when* the student filters by `L`, *then* the message `No open Frappe (L) tasks found.` is displayed.
-- *Given* the student enters an invalid size, *when* confirmed, *then* the app asks again until `S`, `M` or `L` is entered.
+- *Given* there are two open `S` tasks and one open `L` task, *when* the User filters by `S`, *then* only the two `S` tasks are displayed.
+- *Given* there are no open tasks of size `L`, *when* the User filters by `L`, *then* the message `No open Frappe (L) tasks found.` is displayed.
+- *Given* the User enters an invalid size, *when* confirmed, *then* the app asks again until `S`, `M` or `L` is entered.
 
 ---
 
 #### US-12: View completed tasks and statistics
 
-**As a** professional, **I want** to see a list of my completed tasks and total statistics, **so that** I can review what I have already achieved.
+**As a** User, **I want** to see a list of my completed tasks and total statistics, **so that** I can review what I have already achieved.
 
 ##### US-12 acceptance criteria
 
-The history is shown when the user selects option `9` ("Completed tasks") in the main menu.
+- The history is shown when the User selects option `9` ("Completed tasks") in the main menu.
 - All completed tasks are listed with their title and size name, e.g., `[x] Write README (Latte)`.
 - Below the list, a summary line displays the total number of completed tasks and total XP earned from them, e.g., `Total completed: 5 tasks (110 XP earned)`.
 - *Given* no tasks have been completed yet, *when* the option is selected, *then* the message `No completed tasks yet. Time to get some coffee!` is displayed.
@@ -236,8 +235,10 @@ The history is shown when the user selects option `9` ("Completed tasks") in the
 
 ### Use Cases
 
-- Add, show and delete tasks
+- Add, show, edit and delete tasks
+- Filter open tasks by size
 - Finish a task and feed the buddy
+- View completed tasks and statistics
 - Check on and pet the buddy
 - Save and load progress (to `data/save.json`)
 
@@ -251,11 +252,13 @@ Each app must meet the following three criteria in order to be accepted:
 
 ### 1. Interactive App (Console Input)
 
-The application interacts with the user via the console. Users can:
+The application interacts with the User via the console. Users can:
 
 - Name their coffee buddy on the first start
 - Add tasks with a title and a size
-- View, finish and delete tasks
+- View, edit, finish and delete tasks
+- Filter open tasks by size
+- View completed tasks and statistics
 - Check on the buddy (ASCII art, mood, caffeine, XP, level, stage)
 - Pet the buddy and read its reactions
 - Save and quit the application
@@ -264,7 +267,9 @@ Example of the main menu:
 
 ```text
   1) Show tasks   2) Add task   3) Finish task (feed!)
-  4) Delete task  5) Check on buddy   6) Pet buddy   0) Save & quit
+  4) Delete task  5) Check on buddy   6) Pet buddy   
+  7) Edit task   8) Filter tasks by size   9) Completed tasks
+  0) Save & quit
   >
 ```
 
@@ -272,21 +277,31 @@ Example of the main menu:
 
 The application validates all user input to ensure data integrity and a smooth user experience. This is implemented in `main.py`, `tasks.py` and `storage.py` as follows:
 
-- **Number input:** The helper function `ask_number()` is used whenever a task number is needed. It only returns a valid number in the allowed range or `0` (cancel):
+- **Number input**: The helper function ask_number() is used whenever a task number is needed. It only returns a valid number in the allowed range or 0 (cancel):
+<!-- TODO: add code example -->
 
+- **Task title**: Empty titles are rejected:
+<!-- TODO: add code example -->
 
-- **Task title:** Empty titles are rejected:
+- **Task size**: The size is asked again until a valid key is entered. Spaces and lower case are accepted:
+<!-- TODO: add code example -->
 
-- **Task size:** The size is asked again until a valid key is entered. Spaces and lower case are accepted:
+- **Edit task:** Pressing Enter keeps the current title or size, so the User does not have to retype unchanged values:
+<!-- TODO: add code example -->
+
+- **Size filter:** The size is asked again until S, M or L is entered (case-insensitive):
+<!-- TODO: add code example -->
 
 - **Value limits:** Caffeine always stays between 0 and 100:
+<!-- TODO: add code example -->
 
 - **Save file validation:** A broken save file does not crash the app:
+<!-- TODO: add code example -->
 
 - **Main menu options:** The main menu handles invalid choices gracefully:
+<!-- TODO: add code example -->
 
-
-These checks prevent crashes and guide the user to provide correct input.
+These checks prevent crashes and guide the User to provide correct input.
 
 ### 3. File Processing
 
@@ -296,8 +311,8 @@ The application reads and writes data using a JSON file.
 
 
 - The file is **read** at startup with `json.load()`. If it does not exist, a new game is started.
-- The file is **written** with `json.dump()` after every menu action and when the user quits.
-- The value `last_seen` is used to calculate how much caffeine the buddy lost while the user was away.
+- The file is **written** with `json.dump()` after every menu action and when the User quits.
+- The value `last_seen` is used to calculate how much caffeine the buddy lost while the User was away.
 
 ## Implementation
 
@@ -313,7 +328,7 @@ The application reads and writes data using a JSON file.
 taskagotchi/
 ├── main.py          # Entry point: main menu loop
 ├── tasks.py         # Add / list / edit / delete / complete tasks
-├── buddy.py           # buddy stats, moods, ASCII art, reactions
+├── buddy.py         # buddy stats, moods, ASCII art, reactions
 ├── progress.py      # XP, levels, evolution stages, caffeine decay
 ├── storage.py       # Save & load data (JSON)
 ├── data/
@@ -350,7 +365,7 @@ These libraries are part of the Python standard library, so no external installa
 | Philipp Zoller | Coffee buddy: feeding, moods, ASCII art and reactions (`buddy.py`, US-04 – US-06) |
 | Federico Janzich | Progression: XP, levels, evolution and caffeine decay (`progress.py`, US-07 – US-09) |
 | Fatos Sallauka | Extended task features: edit tasks, filter by size and completed tasks history (`tasks.py`, US-10 – US-12) |
-| Whole team | App shell: main menu, saving/loading and input validation (`main.py`, `storage.py`)|
+| Whole team | App shell: main menu, saving/loading and input validation (`main.py`, `storage.py`) |
 
 ## License
 
