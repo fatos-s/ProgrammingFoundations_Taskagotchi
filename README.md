@@ -273,46 +273,117 @@ Example of the main menu:
   >
 ```
 
+
+
 ### 2. Data Validation
 
-The application validates all user input to ensure data integrity and a smooth user experience. This is implemented in `main.py`, `tasks.py` and `storage.py` as follows:
+### 2. Data Validation & Architecture
 
-- **Number input**: The helper function ask_number() is used whenever a task number is needed. It only returns a valid number in the allowed range or 0 (cancel):
-<!-- TODO: add code example -->
+To satisfy course guidelines on defensive programming while maintaining clean separation of concerns (as recommended during our coaching session with Philip), **all validations previously proposed in the project are fully retained**, but modularized across dedicated layers rather than being mixed into business logic:
 
-- **Task title**: Empty titles are rejected:
-<!-- TODO: add code example -->
+1. **User Input Layer (`user_input.py`)**: Console input collection and before data enters the application.
+2. **Storage Layer (`storage.py`)**: File validation to handle corrupted, missing, or empty JSON files.
+3. **Domain & Progression Logic (`task.py`, `progress.py`)**: Rule-based boundary enforcement (value limits and thresholds).
 
-- **Task size**: The size is asked again until a valid key is entered. Spaces and lower case are accepted:
-<!-- TODO: add code example -->
+---
 
-- **Edit task:** Pressing Enter keeps the current title or size, so the User does not have to retype unchanged values:
-<!-- TODO: add code example -->
+#### A. Interactive Console Validations (`user_input.py`)
+All console prompts are centralized here to prevent uncaught runtime errors and eliminate repetitive `while` loops across task modules:
 
-- **Size filter:** The size is asked again until S, M or L is entered (case-insensitive):
-<!-- TODO: add code example -->
+* **Dynamic Task Size Validation (`input_size`)**:
+  * *Original Requirement*: Validate task sizes `S`, `M`, and `L`.
+  * *Coaching Implementation*: Following Philip's architecture, sizes and XP/caffeine rewards are mapped inside a central dictionary (`SIZE_INFO`):
+    * `S`: Espresso (+10 XP, +10% Caffeine)
+    * `M`: Latte (+25 XP, +20% Caffeine)
+    * `L`: Frappe (+50 XP, +35% Caffeine)
+    * `XL`: Cold Brew (+100 XP, +50% Caffeine)
+    Instead of hardcoding comparisons, the console prompt dynamically generates allowed choices (`"/".join(SIZE_INFO.keys())`) and loops with `.strip().upper()`. If new sizes are introduced, the prompt and validation update automatically without touching task logic.
 
-- **Value limits:** Caffeine always stays between 0 and 100:
-<!-- TODO: add code example -->
+* **Defensive Number Input (`ask_number`)**:
+  * *Original Requirement*: Prevent the application from crashing when non-numeric inputs are entered for menu or task selection.
+  * *Implementation*: Replaces direct `int(input())` calls with a loop using `.isdigit()` and boundary checks (`min_val <= num <= max_val`). Gracefully catches invalid characters, negative numbers, or empty Enter keystrokes, reprompting the user without raising a `ValueError`.
 
-- **Save file validation:** A broken save file does not crash the app:
-<!-- TODO: add code example -->
+* **Task Title Sanitization (`input_task_title`)**:
+  * *Original Requirement*: Ensure task titles are not blank.
+  * *Implementation*: Validates input using `.strip()`. Rejects empty strings and reprompts with: *"A task with no name? Mysterious. Not allowed."*
 
-- **Main menu options:** The main menu handles invalid choices gracefully:
-<!-- TODO: add code example -->
+* **Non-destructive Edit Prompts (`input_edit_field`)**:
+  * *Original Requirement* (US-10): Allow pressing Enter to retain existing title or size.
+  * *Implementation*: Captures input and returns the existing value if the user submits an empty string, avoiding accidental overwrites.
 
-These checks prevent crashes and guide the User to provide correct input.
+---
 
-### 3. File Processing
+#### B. File Persistence Validations (`storage.py`)
+* **Corrupted / Missing Save File Protection**:
+  * *Original Requirement*: *"A broken save file does not crash the app."*
+  * *Implementation*: File operations in `load_game_data()` are wrapped in a `try...except (FileNotFoundError, json.JSONDecodeError)` block. If `data/save.json` is missing, damaged, or empty, the application does not crash; it logs a warning, initializes a clean default game template (`tasks: []`, default buddy), and auto-creates the directory structure.
 
-The application reads and writes data using a JSON file.
+---
 
-**Save file:** `data/save.json` contains the buddy, all tasks and the time of the last visit, for example:
+#### C. In-Game State & Value Limits (`progress.py` & `task.py`)
+* **Caffeine Clamping (0% to 100%)**:
+  * *Original Requirement*: *"Caffeine always stays between 0 and 100."*
+  * *Implementation*: 
+    * Task completion increases caffeine using `min(100, current + gain)`.
+    * Turn-based decay calculates hours since `last_caffeine` and decreases caffeine using `max(0, current - loss)`.
+* **Non-empty Task Selection & Task Status**:
+  * *Original Requirement*: Disallow selecting, completing, or deleting tasks from an empty list or passing invalid list indices.
+  * *Implementation*: `main.py` checks `if not tasks:` before delegating to `task.py`, and operations require valid 1-based indexing mapped cleanly to zero-based Python lists.
 
 
-- The file is **read** at startup with `json.load()`. If it does not exist, a new game is started.
-- The file is **written** with `json.dump()` after every menu action and when the User quits.
-- The value `last_seen` is used to calculate how much caffeine the buddy lost while the User was away.
+
+
+### 3. File Processing & JSON Architecture
+
+Game progress and application state are continuously persisted to a structured JSON file located at `data/save.json` using Python's standard `json` and `pathlib` modules.
+
+Following the feedback from our coaching session with Philip, the storage architecture incorporates three key design decisions:
+1. **Immediate State Persistence**: Instead of saving only upon exiting (`Option 0`), the application saves immediately after any state-modifying action (adding, editing, completing, or deleting a task). This prevents data loss in the event of an abrupt terminal closure or system crash.
+
+2. **Save File Recovery**: `load_game_data()` in `storage.py` wraps file access inside a `try...except (FileNotFoundError, json.JSONDecodeError)` block. If `data/save.json` is missing or corrupted, the program logs a notice and initializes a clean default template rather than crashing.
+
+3. **Turn-based Inactivity & Caffeine Decay**: Rather than running background threads or timers, Taskagotchi evaluates time elapsed on startup and user interaction by computing:
+   ```python
+   elapsed = datetime.now() - datetime.fromisoformat(taskgochi["last_caffeine"])
+
+**Hierarchical Schema (data/save.json)**
+The JSON structure follows the hierarchical design demonstrated during coaching, separating user credentials, task entities, and virtual companion state:
+{
+  "username": "Player",
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Complete programming project",
+      "size": "L",
+      "done": false
+    },
+    {
+      "id": 2,
+      "title": "Review lecture slides",
+      "size": "S",
+      "done": true
+    }
+  ],
+  "taskagotchi": {
+    "name": "Bean",
+    "level": 1,
+    "experience_points": 75,
+    "caffeine": 50,
+    "last_caffeine": "2026-11-17T12:00:00"
+  }
+}   
+**Field Specifications:**
+tasks (List of Dictionaries):
+id (int): Sequential task identifier.
+title (str): Sanitized task description.
+size (str): Drink category mapped to SIZE_INFO (S, M, L, XL).
+done (bool): Boolean flag indicating completion status (false for open, true for completed).
+taskagotchi (Dictionary):
+name (str): Companion nickname.
+level (int): Current level, calculated using level * 50 XP thresholds.
+experience_points (int): Cumulative XP gained from completed tasks.
+caffeine (int): Energy meter clamped between 0 and 100.
+last_caffeine (str): ISO-formatted timestamp (YYYY-MM-DDTHH:MM:SS) tracking the most recent feeding or interaction.
 
 ## Implementation
 
@@ -326,13 +397,14 @@ The application reads and writes data using a JSON file.
 
 ```text
 taskagotchi/
-├── main.py          # Entry point: main menu loop
-├── tasks.py         # Add / list / edit / delete / complete tasks
-├── buddy.py         # buddy stats, moods, ASCII art, reactions
-├── progress.py      # XP, levels, evolution stages, caffeine decay
-├── storage.py       # Save & load data (JSON)
+├── main.py          # Entry point: main menu loop and app orchestration
+├── task.py          # Task management logic (add, list, edit, delete, complete)
+├── user_input.py    # Centralized input collection & dynamic validation (sizes, dates, numbers)
+├── buddy.py         # Buddy stats, moods, ASCII art, and reactions
+├── progress.py      # XP formulas, level progression, and caffeine decay
+├── storage.py       # JSON file persistence (load and save)
 ├── data/
-│   └── save.json    # Created automatically on first save
+│   └── save.json    # Created automatically on first run
 └── README.md
 ```
 
@@ -357,15 +429,29 @@ taskagotchi/
 
 These libraries are part of the Python standard library, so no external installation is required.
 
+
 ## Team & Contributions
 
-| Name | Contribution |
-| --- | --- |
-| Martina Juric | Task management: add, show and delete tasks (`tasks.py`, US-01 – US-03) |
-| Philipp Zoller | Coffee buddy: feeding, moods, ASCII art and reactions (`buddy.py`, US-04 – US-06) |
-| Federico Janzich | Progression: XP, levels, evolution and caffeine decay (`progress.py`, US-07 – US-09) |
-| Fatos Sallauka | Extended task features: edit tasks, filter by size and completed tasks history (`tasks.py`, US-10 – US-12) |
-| Whole team | App shell: main menu, saving/loading and input validation (`main.py`, `storage.py`) |
+Following the course guidelines, each team member is individually responsible for authoring and defending 3 specific User Stories, while cross-cutting infrastructure (application shell, input validation, and persistence) is shared across the entire team:
+
+| Member | Module | User Stories | Core Responsibilities |
+| :--- | :--- | :--- | :--- |
+| **Martina Juric** | `task.py` | **US-01, US-02, US-03** | Core task management: add task with size, list open tasks, and delete task. |
+| **Philipp Zoller** | `buddy.py` | **US-04, US-05, US-06** | Virtual companion: complete task / feed buddy, render ASCII art & stat bars, random humorous reactions. |
+| **Federico Janzich** | `progress.py` | **US-07, US-08, US-09** | Progression mechanics: `level * 50` XP formula, multi-level level-ups, evolution milestones, and turn-based caffeine decay. |
+| **Fatos Sallauka** | `task.py` | **US-10, US-11, US-12** | Extended task operations: edit existing task, filter tasks by size category, and display completed tasks history with total XP. |
+| **Whole Team** | `main.py`, `user_input.py`, `storage.py` | **App Shell & Persistence** | Interactive console menu dispatching, centralized dynamic input validation, and immediate JSON auto-saving. |
+
+---
+
+### Collaborative Git Workflow & Commit Rules
+
+Based on direct feedback from our coaching session with Philip:
+
+- **Single Branch Model**: To minimize merge conflicts in a four-person group, all members contribute directly to the `main` branch rather than maintaining long-lived feature branches.
+- **Sync Before Coding**: Always run `git pull origin main` before starting local work in VS Code to pull your teammates' latest updates.
+- **Continuous & Individual Commits**: Evaluation is strictly tied to verifiable personal GitHub commit activity. Team members must commit and push their respective user stories incrementally rather than dumping code in single large uploads.
+- **Imperative Commit Messages**: Commits must follow professional conventions using clear, imperative descriptions (e.g., `Add dynamic input_size validation in user_input.py` or `Implement XP formula in progress.py`).
 
 ## License
 
