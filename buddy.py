@@ -50,19 +50,3 @@ def finish_task(tasks, buddy):
         except ValueError:
             print("Please enter a valid number.")
 
-
-if __name__ == "__main__":
-    buddy = {
-        "name": "Bean",
-        "caffeine": 50
-    }
-
-    tasks = [
-        {"title": "Study Python", "size": "M", "done": False},
-        {"title": "Write README", "size": "L", "done": False}
-    ]
-
-    finish_task(tasks, buddy)
-
-    print(tasks)
-    print(buddy)
